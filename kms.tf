@@ -13,6 +13,7 @@ resource "google_kms_crypto_key" "phi_key" {
   name            = "${local.app}-cmek"
   key_ring        = google_kms_key_ring.phi_keyring.id
   rotation_period = "7776000s" # 90 days
+  destroy_scheduled_duration = "10368000s"
 
   lifecycle {
     prevent_destroy = true
