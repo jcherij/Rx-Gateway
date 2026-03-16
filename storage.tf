@@ -29,6 +29,14 @@ resource "google_storage_bucket" "rx_pdfs" {
   }
 }
 
+resource "google_logging_project_sink" "audit_logs_sink" {
+  name                   = "hipaa-audit-logs-sink"
+  description            = "HIPAA audit logs routing to storage for 7-year retention"
+  destination            = "storage.googleapis.com/${google_storage_bucket.rx_pdfs.name}"
+  filter                 = "logName:\"cloudaudit.googleapis.com\""
+  unique_writer_identity = true
+}
+
 # Scoped to objectCreator — write-only access for PDF uploads
 resource "google_storage_bucket_iam_member" "rx_pdfs_api_access" {
   bucket = google_storage_bucket.rx_pdfs.name
